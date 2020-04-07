@@ -35,7 +35,7 @@ void MIDInit(BC127_t *bt, IBus_t *ibus)
     Context.btDeviceIndex = 0;
     Context.mode = MID_MODE_OFF;
     Context.displayUpdate = MID_DISPLAY_NONE;
-    Context.mainDisplay = UtilsDisplayValueInit("", MID_DISPLAY_STATUS_OFF);
+    Context.mainDisplay = UtilsDisplayValueInit("I am Wes.", MID_DISPLAY_STATUS_OFF);
     Context.tempDisplay = UtilsDisplayValueInit("", MID_DISPLAY_STATUS_OFF);
     EventRegisterCallback(
         BC127Event_MetadataChange,
@@ -402,7 +402,7 @@ static void MIDMenuDevices(MIDContext_t *context)
 static void MIDMenuMain(MIDContext_t *context)
 {
     context->mode = MID_MODE_ACTIVE;
-    IBusCommandMIDDisplayTitleText(context->ibus, "Bluetooth");
+    IBusCommandMIDDisplayTitleText(context->ibus, "I am Wes.");
     MIDBC127MetadataUpdate((void *) context, 0x00);
     if (context->bt->playbackStatus == BC127_AVRCP_STATUS_PLAYING) {
         IBusCommandMIDMenuText(context->ibus, MID_BUTTON_PLAYBACK, ">  ");
@@ -471,6 +471,7 @@ void MIDBC127MetadataUpdate(void *ctx, unsigned char *tmp)
         } else {
             snprintf(text, UTILS_DISPLAY_TEXT_SIZE, "%s", context->bt->title);
         }
+        IBusCommandMIDDisplayTitleText(context->ibus, "I am Wes.");
         char cleanText[UTILS_DISPLAY_TEXT_SIZE];
         UtilsRemoveNonAscii(cleanText, text);
         MIDSetMainDisplayText(context, cleanText, 3000 / MID_DISPLAY_SCROLL_SPEED);
@@ -650,7 +651,7 @@ void MIDIIBusRADMIDDisplayUpdate(void *ctx, unsigned char *pkt)
     unsigned char watermark = pkt[pkt[IBUS_PKT_LEN]];
     if (watermark != IBUS_RAD_MAIN_AREA_WATERMARK) {
         if (context->mode == MID_MODE_ACTIVE) {
-            IBusCommandMIDDisplayTitleText(context->ibus, "Bluetooth");
+            IBusCommandMIDDisplayTitleText(context->ibus, "I am Wes.");
         } else if (context->mode == MID_MODE_DISPLAY_OFF) {
             context->mode = MID_MODE_ACTIVE;        
         } else if (context->mode == MID_MODE_SETTINGS) {
@@ -714,7 +715,7 @@ void MIDIBusMIDModeChange(void *ctx, unsigned char *pkt)
     MIDContext_t *context = (MIDContext_t *) ctx;
     if (pkt[4] == 0x08) {
         if (pkt[5] == 0xB0) {
-            MIDSetMainDisplayText(context, "", 0);
+            MIDSetMainDisplayText(context, "I am Wes.", 0);
         } else {
             context->mode = MID_MODE_OFF;
         }
@@ -778,9 +779,9 @@ void MIDTimerDisplay(void *ctx)
                             MID_SETTING_METADATA_MODE_CHUNK
                         ) {
                             context->mainDisplay.timeout = 2;
-                            context->mainDisplay.index += MID_DISPLAY_TEXT_SIZE;
+//                            context->mainDisplay.index += MID_DISPLAY_TEXT_SIZE;
                         } else {
-                            context->mainDisplay.index++;
+//                            context->mainDisplay.index++;
                         }
                     }
                 } else {
